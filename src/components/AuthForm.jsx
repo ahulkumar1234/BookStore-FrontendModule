@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../api/Api";
+import toast from "react-hot-toast";
 
  function AuthForm({ onLoginSuccess }) {
   const [tab, setTab] = useState("login");
@@ -36,10 +37,10 @@ import { api } from "../api/Api";
           };
 
       const res = await api.post(url, payload);
-      alert(res.data.message || "Registered!");
+      toast.success(res.data.message || "Registered!");
       setTab("login");
     } catch (err) {
-      alert(err.response?.data?.message || "Register failed!");
+      toast.error(err.response?.data?.message || "Register failed!");
     }
   };
 
@@ -50,10 +51,10 @@ import { api } from "../api/Api";
         password: form.password,
       });
 
-      alert("Login success!");
+      toast.success("Login success!");
       onLoginSuccess(res.data?.data?.role || "user");
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed!");
+      toast.error(err.response?.data?.message || "Login failed!");
     }
   };
 

@@ -3,6 +3,7 @@ import { api } from "../api/Api";
 import BooksList from "../components/BooksList";
 import AddBook from "../components/AddBook";
 import EditBookModal from "../components/EditBookModal";
+import toast from "react-hot-toast";
 
 export default function Dashboard({ role }) {
   const [books, setBooks] = useState([]);
@@ -18,22 +19,22 @@ export default function Dashboard({ role }) {
   const createBook = async (bookData) => {
     try {
       const res = await api.post("/books/create", bookData);
-      alert(res.data.message || "Book added!");
+      toast.success(res.data.message || "Book added!");
       fetchBooks();
     } catch (err) {
       console.log(err.response?.data);
-      alert(err.response?.data?.message || "Create failed");
+      toast.error(err.response?.data?.message || "Create failed");
     }
   };
 
   const deleteBook = async (id) => {
     try {
       const res = await api.delete(`/books/delete/${id}`);
-      alert(res.data.message || "Book deleted!");
+      toast.success(res.data.message || "Book deleted!");
       fetchBooks();
     } catch (err) {
       console.log(err.response?.data);
-      alert(err.response?.data?.message || "Delete failed");
+      toast.error(err.response?.data?.message || "Delete failed");
     }
   };
 
@@ -45,13 +46,13 @@ export default function Dashboard({ role }) {
   const updateBook = async (id, updatedData) => {
     try {
       const res = await api.put(`/books/update/${id}`, updatedData);
-      alert(res.data.message || "Book updated!");
+      toast.success(res.data.message || "Book updated!");
       setEditOpen(false);
       setSelectedBook(null);
       fetchBooks();
     } catch (err) {
       console.log(err.response?.data);
-      alert(err.response?.data?.message || "Update failed");
+      toast.error(err.response?.data?.message || "Update failed");
     }
   };
 

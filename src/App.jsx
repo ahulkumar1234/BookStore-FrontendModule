@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import AuthPage from "./pages/AuthPage";
 import Dashboard from "./pages/Dashboard";
 import { api } from "./api/Api";
+import { Toaster } from 'react-hot-toast';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -35,6 +36,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-4">
+      <Toaster position="top-center"/>
       <div className="w-full max-w-3xl">
         <Navbar
           loggedIn={loggedIn}

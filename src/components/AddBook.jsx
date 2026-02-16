@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AddBook({ onCreate }) {
     const [bookForm, setBookForm] = useState({
@@ -23,7 +24,7 @@ export default function AddBook({ onCreate }) {
             !bookForm.stock ||
             !bookForm.description
         ) {
-            alert("All fields required!");
+            toast.error("All fields required!");
             return;
         }
 
