@@ -2,9 +2,10 @@ import { useState } from "react";
 import { api } from "../api/Api";
 import toast from "react-hot-toast";
 
- function AuthForm({ onLoginSuccess }) {
+function AuthForm({ onLoginSuccess }) {
   const [tab, setTab] = useState("login");
   const [isAdminRegister, setIsAdminRegister] = useState(false);
+  const [loadig, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -19,33 +20,37 @@ import toast from "react-hot-toast";
 
   const register = async () => {
     try {
+      setLoading(true)
       const url = isAdminRegister
         ? "/users/admin/register"
         : "/users/register";
 
       const payload = isAdminRegister
         ? {
-            name: form.name,
-            email: form.email,
-            password: form.password,
-            adminKey: form.adminKey,
-          }
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          adminKey: form.adminKey,
+        }
         : {
-            name: form.name,
-            email: form.email,
-            password: form.password,
-          };
+          name: form.name,
+          email: form.email,
+          password: form.password,
+        };
 
       const res = await api.post(url, payload);
       toast.success(res.data.message || "Registered!");
+      setLoading(false)
       setTab("login");
     } catch (err) {
       toast.error(err.response?.data?.message || "Register failed!");
+      setLoading(false)
     }
   };
 
   const login = async () => {
     try {
+      setLoading(true)
       const res = await api.post("/users/login", {
         email: form.email,
         password: form.password,
@@ -53,8 +58,10 @@ import toast from "react-hot-toast";
 
       toast.success("Login success!");
       onLoginSuccess(res.data?.data?.role || "user");
+      setLoading(false)
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed!");
+      setLoading(false)
     }
   };
 
@@ -63,22 +70,20 @@ import toast from "react-hot-toast";
       <div className="flex gap-2">
         <button
           onClick={() => setTab("login")}
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
-            tab === "login"
-              ? "bg-blue-600"
-              : "bg-white/10 hover:bg-white/15"
-          }`}
+          className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${tab === "login"
+            ? "bg-blue-600"
+            : "bg-white/10 hover:bg-white/15"
+            }`}
         >
           Login
         </button>
 
         <button
           onClick={() => setTab("register")}
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
-            tab === "register"
-              ? "bg-blue-600"
-              : "bg-white/10 hover:bg-white/15"
-          }`}
+          className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${tab === "register"
+            ? "bg-blue-600"
+            : "bg-white/10 hover:bg-white/15"
+            }`}
         >
           Register
         </button>
@@ -134,9 +139,9 @@ import toast from "react-hot-toast";
 
           <button
             onClick={register}
-            className="w-full bg-blue-600 hover:bg-blue-700 transition px-4 py-3 rounded-xl font-semibold"
+            className={`w-full bg-blue-600 hover:bg-blue-700 transition px-4 py-3 rounded-xl font-semibold`}
           >
-            Register
+            {loadig ? "Registering..." : "Register"}
           </button>
         </div>
       )}
@@ -166,7 +171,7 @@ import toast from "react-hot-toast";
             onClick={login}
             className="w-full bg-blue-600 hover:bg-blue-700 transition px-4 py-3 rounded-xl font-semibold"
           >
-            Login
+            {loadig ? "Logging..." : "Login"}
           </button>
         </div>
       )}

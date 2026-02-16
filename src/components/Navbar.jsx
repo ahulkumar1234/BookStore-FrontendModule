@@ -1,6 +1,6 @@
 
 
-function Navbar({ loggedIn, role, onLogout, onGoAuth }) {
+function Navbar({ loggedIn, role, onLogout, onGoAuth, loading }) {
   return (
     <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
       <h1 className="font-bold text-lg">📚 Book Store</h1>
@@ -16,7 +16,7 @@ function Navbar({ loggedIn, role, onLogout, onGoAuth }) {
               onClick={onLogout}
               className="bg-white/10 hover:bg-white/15 transition px-4 py-2 rounded-xl text-sm font-semibold"
             >
-              Logout
+              {loading ? "Logging out..." : "Logout"}
             </button>
           </>
         ) : (

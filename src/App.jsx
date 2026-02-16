@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const checkLogin = async () => {
     try {
@@ -27,22 +28,25 @@ export default function App() {
 
   const logout = async () => {
     try {
+      setLoading(true)
       await api.post("/users/logout");
+      setLoading(false)
     } catch (err) { }
-
+    setLoading(false)
     setLoggedIn(false);
     setRole("");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-4">
-      <Toaster position="top-center"/>
+      <Toaster position="top-center" />
       <div className="w-full max-w-3xl">
         <Navbar
           loggedIn={loggedIn}
           role={role}
           onLogout={logout}
           onGoAuth={() => { }}
+          loading={loading}
         />
 
         {!loggedIn ? (
